@@ -30,10 +30,11 @@ struct Point {
 };
 bool operator==(Point const &lhs, Point const &rhs);
 std::istream &operator>>(std::istream &is, Point &rhs);
+
 //
-Point operator+(Point const &lhs, Point const &rhs);
+Point operator+(Point const& lhs, Point const& rhs); 
+Point operator*(Point const& lhs, int rhs);
 Point operator-(Point const &lhs, Point const &rhs);
-Point operator*(Point const &lhs, int rhs);
 //
 
 /*

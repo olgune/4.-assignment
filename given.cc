@@ -49,3 +49,13 @@ void Pacman::set_direction(Point const &p) {
     }
     dir = p;
 }
+
+Point operator+(Point const& lhs, Point const& rhs)
+{
+    return {lhs.x + rhs.x, lhs.y + rhs.y};
+}
+
+Point operator*(Point const& lhs, int rhs)
+{
+    return {lhs.x * rhs, lhs.y * rhs};
+}

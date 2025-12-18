@@ -1,65 +1,68 @@
 #ifndef GHOST_H
 #define GHOST_H
 
-#include "../given.h"
+#include "given.h" // Provides Point and Pacman
 #include <string>
+#include <stdexcept>
 
-// Abstract Base Class
+// --- Abstract Base Class ---
 class Ghost {
-  public:
-    // Constructor required by game.cc
-    Ghost(const Pacman &pacman, Point pos, Point scatter_target);
-
+public:
+    // Pacman is passed by const reference (polymorphism requirement) [cite: 354, 355]
+    Ghost(const Pacman& pacman, Point pos, Point scatter_target);
+    
+    // Virtual destructor for inheritance [cite: 352]
     virtual ~Ghost() = default;
 
-    // Common Interface
+    // Interface methods (polymorphic) [cite: 253, 353]
     virtual Point get_chase_point() = 0;
-    virtual Point get_scatter_point(); // Not pure virtual anymore, we can implement default here
+    virtual Point get_scatter_point(); 
     virtual std::string get_color() const = 0;
 
+    // Helper methods [cite: 259, 260]
     void set_position(Point p);
     Point get_position() const;
 
-  protected:
-    // Store reference to Pacman so we can access position/direction later
-    const Pacman &pacman_;
+protected:
+    const Pacman& pacman_; 
     Point position_;
     Point scatter_target_;
 };
 
 class Blinky : public Ghost {
-  public:
-    // Inherit constructor structure
-    Blinky(const Pacman &pacman, Point pos, Point scatter_target);
+public:
+    Blinky(const Pacman& pacman, Point pos, Point scatter_target);
 
     Point get_chase_point() override;
-    Point get_scatter_point() override; // Blinky overrides to handle angry logic
+    // Overrides scatter to check 'angry' status 
+    Point get_scatter_point() override; 
     std::string get_color() const override;
 
+    // Blinky-specific methods [cite: 261, 262]
     bool is_angry() const;
     void set_angry(bool angry);
 
-  private:
-    bool angry_{false};
+private:
+    bool angry_ {false};
 };
 
 class Pinky : public Ghost {
-  public:
-    Pinky(const Pacman &pacman, Point pos, Point scatter_target);
+public:
+    Pinky(const Pacman& pacman, Point pos, Point scatter_target);
 
     Point get_chase_point() override;
     std::string get_color() const override;
 };
 
 class Clyde : public Ghost {
-  public:
-    // Clyde needs an extra argument for the distance threshold 'n'
-    Clyde(const Pacman &pacman, Point pos, Point scatter_target, int n);
+public:
+    // Requires special argument 'n' for distance threshold
+    Clyde(const Pacman& pacman, Point pos, Point scatter_target, int n);
 
     Point get_chase_point() override;
     std::string get_color() const override;
 
-  private:
+private:
     int n_;
 };
 
